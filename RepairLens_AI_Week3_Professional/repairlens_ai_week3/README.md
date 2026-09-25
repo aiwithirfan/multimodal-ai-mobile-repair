@@ -1,47 +1,66 @@
-# RepairLens AI — Multi-Modal AI Tool for a Family-Owned Mobile Repair Shop
+RepairLens AI — Multi-Modal AI Tool for a Family-Owned Mobile Repair Shop
 
-**Week 3 — Professional / Advanced Practical Build**
+Week 3 — Professional / Advanced Practical Build
 
-RepairLens AI is a Streamlit-based multimodal repair-intake assistant. It combines a phone image with customer/technician text and uses **LangChain + Groq vision inference** to produce a technician-ready triage assessment.
+Live Demo: https://multimodal-ai-mobile-repair-nul39qfbuzcwgjcm2pwfze.streamlit.app/
 
-> **Important:** This is decision-support software, not a substitute for physical inspection by a qualified technician. The model is instructed to distinguish visual observations from inferences and to surface uncertainty.
+RepairLens AI is a Streamlit-based multimodal repair-intake assistant for a family-owned mobile repair shop. It combines text + image inputs and uses LangChain + Groq vision inference to generate a structured technician-ready triage assessment.
 
-## 1. Scope statement
+«Important: RepairLens AI is a decision-support tool, not a substitute for physical inspection by a qualified technician. Final diagnosis and repair decisions require physical inspection and appropriate diagnostic procedures.»
 
-A family-owned mobile repair shop often receives incomplete descriptions such as “screen is broken,” “phone is not charging,” or “there is a strange error.” RepairLens AI gives the shop a consistent visual intake workflow: the staff member uploads a photo, adds the customer's symptoms, selects an analysis mode, and receives a concise assessment containing observations, likely issue, confidence/limitations, next checks, safety notes, and a customer-facing explanation.
+1. Scope
 
-### In scope
+A family-owned mobile repair shop often receives incomplete descriptions such as "screen is broken," "phone is not charging," or "there is a strange error."
+
+RepairLens AI provides a consistent visual intake workflow:
+
+Upload image → Add customer symptoms → Analyze → Generate technician-ready assessment
+
+The assessment includes:
+
+- Visual observations
+- Likely issue
+- Confidence and limitations
+- Recommended technician checks
+- Safety notes
+- Customer-friendly explanation
+
+In Scope
+
 - Phone/device image intake
 - Text + image multimodal reasoning
 - Visual Q&A
 - OCR-oriented error/model-label reading
 - Physical damage triage
 - Technician next-check recommendations
-- Customer-friendly explanation
-- TXT export of the assessment
-- Test matrix and edge-case handling
+- Customer-friendly explanations
+- TXT assessment export
+- Test scenarios and edge-case handling
 
-### Out of scope
+Out of Scope
+
 - Autonomous repair decisions
 - Exact repair pricing
 - Parts ordering
 - Warranty decisions
-- Opening or modifying a device without technician supervision
-- Guaranteed identification of hidden/internal component damage
+- Unsupervised device opening or modification
+- Guaranteed identification of hidden/internal damage
 
-## 2. Why the project is different from Weeks 1–2
+---
 
-| Week | Business | Core workflow |
-|---|---|---|
-| Week 1 | Restaurant chain | Text/product recommendation |
-| Week 2 | Lifestyle websites | Website quality auditing |
-| Week 3 | Family-owned mobile repair shop | **Multimodal image + text repair intake** |
+2. Why This Project Is Different
 
-The Week 3 build adds a new modality and a physical-world evidence workflow. The key engineering concern is not simply generating text: it is combining visual evidence with customer context while explicitly communicating uncertainty and safety.
+Week| Business| Core Workflow
+Week 1| Restaurant Chain| Text-based product recommendation
+Week 2| Lifestyle Websites| Website quality auditing
+Week 3| Family-Owned Mobile Repair Shop| Multimodal image + text repair intake
 
-## 3. Architecture
+Week 3 introduces a new modality and a physical-world evidence workflow. The main engineering challenge is combining visual evidence with customer context while clearly communicating uncertainty and safety considerations.
 
-```text
+---
+
+3. Architecture
+
                     ┌─────────────────────┐
                     │     Streamlit UI    │
                     │ image + text + mode │
@@ -49,7 +68,7 @@ The Week 3 build adds a new modality and a physical-world evidence workflow. The
                                │
                                ▼
                     ┌─────────────────────┐
-                    │ Image preprocessing │
+                    │ Image Preprocessing │
                     │ resize → JPEG → URL │
                     └──────────┬──────────┘
                                │
@@ -63,37 +82,73 @@ The Week 3 build adds a new modality and a physical-world evidence workflow. The
                                ▼
                     ┌─────────────────────┐
                     │    Groq Vision LLM  │
-                    │   Qwen 3.8 27B      │
+                    │    Qwen 3.8 27B     │
                     └──────────┬──────────┘
                                │
                                ▼
               ┌────────────────────────────────┐
-              │ Technician-ready Markdown      │
+              │ Technician-Ready Assessment    │
               │ observations → issue → safety  │
               │ → next checks → customer text  │
               └────────────────────────────────┘
-```
 
-Groq's current vision documentation lists `qwen/qwen3.8-27b` as a multimodal model supporting image + text inputs, OCR, visual question answering, JSON mode, and reasoning. The model is currently described as a preview model, so the `GROQ_MODEL` environment variable is intentionally configurable.
+---
 
-## 4. Tech stack
+4. Tech Stack
 
-- Python 3.10–3.12 recommended
+- Python 3.10–3.12
 - Streamlit
 - LangChain Core
-- LangChain Groq integration
-- Groq multimodal vision model
-- Pillow for image preprocessing
-- python-dotenv for local configuration
-- Git/GitHub for version control
+- LangChain Groq
+- Groq Vision Model
+- Pillow
+- python-dotenv
+- Git & GitHub
 
-## 5. Setup
+AI Model
 
-### Windows PowerShell
+The current project uses:
 
-```powershell
-git clone <YOUR-GITHUB-REPO-URL>
-cd repairlens-ai-week3
+qwen/qwen3.8-27b
+
+The model is configurable through the "GROQ_MODEL" environment variable so that the application can be updated if model availability changes.
+
+---
+
+5. Main Features
+
+📷 Visual Repair Triage
+
+Analyzes visible phone damage such as cracked screens, damaged frames, and other external conditions.
+
+🔎 Visual Q&A
+
+Combines a user's question with the uploaded image to provide visual analysis.
+
+🧾 OCR + Reasoning
+
+Can analyze visible error messages, labels, or other readable text in an uploaded image.
+
+🛠️ Damage Reporting
+
+Produces structured observations and recommended technician checks.
+
+💬 Customer-Ready Explanation
+
+Converts technical findings into a clear explanation suitable for communicating with customers.
+
+⚠️ Safety Awareness
+
+Highlights potential safety concerns such as damaged glass, possible battery problems, heat, or liquid exposure.
+
+---
+
+6. Setup
+
+Windows PowerShell
+
+git clone <YOUR-REPOSITORY-URL>
+cd multimodal-ai-mobile-repair
 
 python -m venv .venv
 .venv\Scripts\Activate.ps1
@@ -101,102 +156,154 @@ python -m venv .venv
 pip install -r requirements.txt
 
 copy .env.example .env
-```
 
-Open `.env` and add your Groq API key:
+Open ".env" and add:
 
-```env
 GROQ_API_KEY=your_real_key_here
 GROQ_MODEL=qwen/qwen3.8-27b
-```
 
-Run:
+Run the application:
 
-```powershell
 streamlit run app.py
-```
 
-The browser should open the RepairLens AI interface.
+Linux / macOS
 
-### Linux / macOS
-
-```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env
-streamlit run app.py
-```
 
-## 6. How to use
+pip install -r requirements.txt
+
+cp .env.example .env
+
+streamlit run app.py
+
+---
+
+7. How to Use
 
 1. Upload a clear phone image.
-2. Add the customer's symptoms.
-3. Select one of:
-   - Full repair triage
-   - Visual Q&A
-   - OCR + reasoning
-   - Damage report
-4. Click **Analyze with RepairLens**.
-5. Review the visual observations and uncertainty.
-6. Use the technician next-checks section as an intake handoff.
-7. Copy/export the customer-facing message when useful.
+2. Enter the customer's symptoms or question.
+3. Select an analysis mode.
+4. Run the analysis.
+5. Review the visual observations.
+6. Review limitations and uncertainty.
+7. Use the technician next-check section as an intake handoff.
+8. Use or export the customer-facing explanation.
 
-## 7. Testing performed / evidence plan
+Available Analysis Modes
 
-The project includes a professional test matrix in the app and `docs/TESTING.md`.
+- Full Repair Triage
+- Visual Q&A
+- OCR + Reasoning
+- Damage Report
 
-Recommended evidence scenarios:
+---
 
-| Test | Input | Expected behavior |
-|---|---|---|
-| T01 | Clear cracked screen | Visible damage described; next checks suggested |
-| T02 | Charging-port close-up | Visible condition discussed; safety caveat |
-| T03 | Error-message image | Legible text extracted and interpreted |
-| T04 | Blurry/dark photo | Limitations acknowledged; better photo requested |
-| T05 | No image | Analysis blocked with clear message |
-| T06 | Missing API key | Configuration error shown without crashing |
+8. Testing
 
-Do not claim a test passed until you personally run it and capture evidence.
+The application was tested using realistic mobile-repair scenarios.
 
-## 8. Professional design decisions
+Test Scenario 1 — Cracked Screen
 
-### Uncertainty-first prompting
-The system is instructed to separate observation from inference and avoid claiming hidden damage as fact.
+Input: Cracked smartphone screen image + customer symptoms.
 
-### Safety guardrail
-Potentially hazardous conditions such as swelling, exposed cells, burning/heat, or liquid ingress trigger an explicit technician/safety warning.
+Result: PASS
 
-### Client-oriented output
-The result is designed around the shop workflow rather than a generic chatbot: intake summary → likely issue → limitations → technician checks → safety → customer message.
+The system identified visible screen damage, considered the reported touch issue, provided technician checks, identified limitations, and generated a customer-facing explanation.
 
-### Configurable model
-The model name is controlled by `GROQ_MODEL`, making the repository easier to maintain if a hosted model is deprecated or replaced.
+Test Scenario 2 — Severe Display Damage
 
-### Privacy
-The app does not intentionally persist uploaded images to a database. The image is converted in memory for the model request. Do not upload unnecessary personal information, IMEI numbers, private documents, or customer data during demonstrations.
+Input: Severely cracked display image + reported black patch and intermittent touch.
 
-## 9. Known limitations
+Result: PASS
+
+The system identified significant screen damage, discussed possible display/digitizer problems, recommended additional inspection, and included safety guidance.
+
+Recommended Additional Tests
+
+Test| Input| Expected Behavior
+T01| Clear cracked screen| Identify visible damage and suggest checks
+T02| Charging-port image| Analyze visible port condition and mention limitations
+T03| Error-message image| Read visible text and explain the issue
+T04| Blurry/dark image| Acknowledge insufficient visual evidence
+T05| No image| Prevent analysis with a clear message
+T06| Missing API key| Show configuration error without crashing
+
+«Only tests that are personally executed should be marked as completed in the final evidence.»
+
+---
+
+9. Professional Design Decisions
+
+Uncertainty-First Prompting
+
+The system is instructed to separate direct visual observations from possible inferences and avoid presenting hidden damage as confirmed fact.
+
+Safety Guardrails
+
+Potentially hazardous conditions such as battery swelling, exposed components, burning/heat, or liquid ingress should trigger appropriate safety warnings and technician inspection.
+
+Client-Oriented Output
+
+The output follows a real repair-shop workflow:
+
+Intake Summary
+      ↓
+Visual Observations
+      ↓
+Likely Issue
+      ↓
+Limitations
+      ↓
+Technician Next Checks
+      ↓
+Safety Notes
+      ↓
+Customer Explanation
+
+Configurable Model
+
+The model is controlled through:
+
+GROQ_MODEL=qwen/qwen3.8-27b
+
+This makes the application easier to maintain if the hosted model is changed or deprecated.
+
+Privacy
+
+The application does not intentionally store uploaded images in a database. Images are processed for the model request.
+
+For demonstrations, avoid uploading unnecessary personal information, IMEI numbers, private documents, or real customer data.
+
+---
+
+10. Known Limitations
 
 - A vision model cannot reliably confirm hidden/internal faults from a single external image.
-- OCR quality depends on focus, lighting, resolution, and text size.
-- Model availability and pricing can change.
+- OCR performance depends on image quality, lighting, focus, resolution, and text size.
+- Model availability and usage limits can change.
 - Final repair diagnosis requires physical inspection and technician measurements.
-- The current version does not connect to a shop inventory, ticketing system, or CRM.
+- The current version does not connect to inventory, ticketing, CRM, or repair-shop databases.
+- Stock or watermarked images may reduce the reliability of visual assessment.
 
-## 10. Future improvements
+---
 
-With more time, I would add:
+11. Future Improvements
+
+With additional development time, I would add:
+
 1. A repair-ticket database with customer consent and access controls.
-2. A retrieval layer containing the shop's approved repair procedures and device-specific guides.
-3. Technician feedback capture so incorrect model observations can be reviewed.
-4. Automated redaction of sensitive identifiers before model submission.
-5. Evaluation datasets and a regression test suite with expected outputs.
+2. A retrieval layer containing approved repair procedures and device-specific guides.
+3. Technician feedback capture for reviewing incorrect observations.
+4. Automatic redaction of sensitive identifiers before model submission.
+5. A dedicated evaluation dataset and regression test suite.
+6. Device-specific repair guidance based on verified model information.
 
-## 11. Suggested GitHub repository structure
+---
 
-```text
-repairlens-ai-week3/
+12. Repository Structure
+
+multimodal-ai-mobile-repair/
 │
 ├── app.py
 ├── requirements.txt
@@ -219,25 +326,42 @@ repairlens-ai-week3/
 │
 └── tests/
     └── test_checklist.md
-```
 
-## 12. Submission checklist
+---
 
-- [ ] Working Streamlit app
-- [ ] GitHub repository is public/private as required by the internship
-- [ ] README reviewed and no placeholders remain
-- [ ] Real test screenshots captured
-- [ ] Testing notes updated with actual results
+13. Submission Checklist
+
+- [x] Working Streamlit application
+- [x] Multimodal text + image workflow
+- [x] LangChain integration
+- [x] Groq vision model integration
+- [x] Technician-ready assessment
+- [x] Customer-facing explanation
+- [x] Safety and limitation handling
+- [x] Realistic test scenarios
+- [ ] Final testing evidence/screenshots
 - [ ] Changelog updated
-- [ ] 5–10 minute screen recording completed
-- [ ] Video clearly explains the tool, LangChain usage, workflow, and debugging
+- [ ] 5–10 minute screen-recording completed
+- [ ] Video explains the project, LangChain workflow, testing, and debugging
 - [ ] Submission form/link completed
 
-## 13. References
+---
 
-- Groq Vision documentation: https://console.groq.com/docs/vision
-- Groq model documentation: https://console.groq.com/docs/models
-- iFixit phone repair resources: https://www.ifixit.com/Device/Phone
-- iFixit repair app / FixBot: https://www.ifixit.com/go/app
-- Apple iPhone repair support: https://support.apple.com/iphone/repair
-- Apple model identification: https://support.apple.com/en-gb/108044
+14. Project Summary
+
+RepairLens AI demonstrates how multimodal AI can support a practical small-business workflow. Instead of treating the system as a general chatbot, the project focuses on a specific operational problem: converting a customer's image and symptom description into a structured repair-intake assessment.
+
+The application demonstrates practical use of LangChain, multimodal vision inference, Streamlit, image preprocessing, uncertainty handling, safety-aware prompting, testing, and professional documentation.
+
+The final diagnosis remains the responsibility of a qualified technician after physical inspection.
+
+---
+
+15. References
+
+- Groq Vision Documentation: https://console.groq.com/docs/vision
+- Groq Models Documentation: https://console.groq.com/docs/models
+- iFixit Phone Repair Resources: https://www.ifixit.com/Device/Phone
+- iFixit Repair App: https://www.ifixit.com/go/app
+- Apple iPhone Repair Support: https://support.apple.com/iphone/repair
+- Apple Model Identification: https://support.apple.com/en-gb/108044

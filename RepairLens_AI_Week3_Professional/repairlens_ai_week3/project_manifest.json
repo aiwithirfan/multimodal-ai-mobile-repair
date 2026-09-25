@@ -1,0 +1,10 @@
+{
+  "project": "RepairLens AI",
+  "week": 3,
+  "scope": "Multimodal text + image repair triage for a family-owned mobile repair shop",
+  "primary_tool": "LangChain",
+  "ui": "Streamlit",
+  "vision_provider": "Groq",
+  "default_model": "qwen/qwen3.8-27b",
+  "note": "Live API key and real test evidence must be added by the student before submission."
+}
